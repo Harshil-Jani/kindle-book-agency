@@ -1,0 +1,120 @@
+<mxfile host="app.diagrams.net" modified="2026-02-08T00:00:00.000Z" agent="Claude Code" version="21.0.0" type="device">
+  <diagram name="Pipeline" id="pipeline-diagram">
+    <mxGraphModel dx="1200" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1100" pageHeight="400" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Phase labels row -->
+        <mxCell id="phase0_label" value="Phase 0" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#6B7280;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="10" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="phase1_label" value="Phase 1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#6B7280;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="10" width="160" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="phase2_label" value="Phase 2" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#6B7280;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="10" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="phase3_label" value="Phase 3" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#6B7280;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="10" width="140" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="phase4_label" value="Phase 4" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#6B7280;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="880" y="10" width="120" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Idea node -->
+        <mxCell id="idea" value="&lt;b&gt;Idea&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=15;fillColor=#F3E8FF;strokeColor=#7C3AED;fontColor=#5B21B6;fontSize=13;rounded=1;arcSize=20;" vertex="1" parent="1">
+          <mxGeometry x="-80" y="95" width="90" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Phase 0: Niche Researcher -->
+        <mxCell id="agent1" value="&lt;b&gt;Niche Researcher&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Market analysis&lt;br&gt;Keywords &amp; audience&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E40AF;fontSize=12;arcSize=20;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="75" width="120" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Phase 1: Ghostwriter -->
+        <mxCell id="agent2" value="&lt;b&gt;Ghostwriter&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Outline &amp; chapters&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#065F46;fontSize=12;arcSize=20;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="230" y="40" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <!-- Phase 1: Cover Designer -->
+        <mxCell id="agent3" value="&lt;b&gt;Cover Designer&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Cover concepts&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#065F46;fontSize=12;arcSize=20;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="230" y="100" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <!-- Phase 1: Marketing Specialist -->
+        <mxCell id="agent4" value="&lt;b&gt;Marketing Specialist&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Launch strategy&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;fontColor=#065F46;fontSize=12;arcSize=20;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="230" y="160" width="160" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Phase 2: Developmental Editor -->
+        <mxCell id="agent5" value="&lt;b&gt;Developmental&lt;br&gt;Editor&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Structural review&lt;br&gt;&amp; scoring&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontColor=#92400E;fontSize=12;arcSize=20;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="470" y="75" width="120" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Phase 3: Proofreader -->
+        <mxCell id="agent6" value="&lt;b&gt;Proofreader&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Copy editing&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#E11D48;fontColor=#9F1239;fontSize=12;arcSize=20;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="660" y="55" width="140" height="50" as="geometry"/>
+        </mxCell>
+        <!-- Phase 3: Formatter -->
+        <mxCell id="agent7" value="&lt;b&gt;Formatter&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Kindle CSS &amp; layout&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#E11D48;fontColor=#9F1239;fontSize=12;arcSize=20;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="660" y="130" width="140" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Phase 4: Kindle Compiler -->
+        <mxCell id="agent8" value="&lt;b&gt;Kindle&lt;br&gt;Compiler&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Final .docx&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0E7FF;strokeColor=#4F46E5;fontColor=#3730A3;fontSize=12;arcSize=20;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="880" y="75" width="120" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Output node -->
+        <mxCell id="output" value="&lt;b&gt;Kindle&lt;br&gt;.docx&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;size=15;fillColor=#F3E8FF;strokeColor=#7C3AED;fontColor=#5B21B6;fontSize=13;rounded=1;arcSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="95" width="90" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="e0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="idea" target="agent1" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent1" target="agent2" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent1" target="agent3" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1c" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent1" target="agent4" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent2" target="agent5" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e3a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent5" target="agent6" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent5" target="agent7" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e4a" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent6" target="agent8" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent7" target="agent8" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6B7280;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="agent8" target="output" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Parallel bracket labels -->
+        <mxCell id="par1" value="parallel" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#059669;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="395" y="100" width="50" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="par2" value="parallel" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9;fontColor=#E11D48;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="805" y="100" width="50" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

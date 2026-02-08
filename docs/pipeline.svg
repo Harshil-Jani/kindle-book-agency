@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -5 1080 260" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-auto">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#9CA3AF"/>
+    </marker>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="116%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Phase background bands -->
+  <rect x="-5" y="0" width="135" height="255" rx="12" fill="#EFF6FF" opacity="0.5"/>
+  <rect x="145" y="0" width="210" height="255" rx="12" fill="#ECFDF5" opacity="0.5"/>
+  <rect x="370" y="0" width="145" height="255" rx="12" fill="#FFFBEB" opacity="0.5"/>
+  <rect x="530" y="0" width="175" height="255" rx="12" fill="#FFF1F2" opacity="0.5"/>
+  <rect x="720" y="0" width="145" height="255" rx="12" fill="#EEF2FF" opacity="0.5"/>
+  <rect x="880" y="0" width="110" height="255" rx="12" fill="#FAF5FF" opacity="0.5"/>
+
+  <!-- Phase labels -->
+  <text x="62" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#6B7280">PHASE 0</text>
+  <text x="250" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#6B7280">PHASE 1</text>
+  <text x="442" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#6B7280">PHASE 2</text>
+  <text x="617" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#6B7280">PHASE 3</text>
+  <text x="792" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#6B7280">PHASE 4</text>
+
+  <!-- Phase 0: Niche Researcher -->
+  <g filter="url(#shadow)">
+    <rect x="10" y="75" width="105" height="80" rx="10" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+  </g>
+  <text x="62" y="100" text-anchor="middle" font-size="10" font-weight="700" fill="#1E40AF">Niche</text>
+  <text x="62" y="113" text-anchor="middle" font-size="10" font-weight="700" fill="#1E40AF">Researcher</text>
+  <text x="62" y="131" text-anchor="middle" font-size="8" fill="#3B82F6">Market analysis</text>
+  <text x="62" y="143" text-anchor="middle" font-size="8" fill="#3B82F6">Keywords &amp; audience</text>
+
+  <!-- Phase 1: Ghostwriter -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="40" width="140" height="48" rx="10" fill="#D1FAE5" stroke="#10B981" stroke-width="1.5"/>
+  </g>
+  <text x="250" y="59" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">Ghostwriter</text>
+  <text x="250" y="76" text-anchor="middle" font-size="8" fill="#059669">Outline &amp; chapters</text>
+
+  <!-- Phase 1: Cover Designer -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="98" width="140" height="48" rx="10" fill="#D1FAE5" stroke="#10B981" stroke-width="1.5"/>
+  </g>
+  <text x="250" y="117" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">Cover Designer</text>
+  <text x="250" y="134" text-anchor="middle" font-size="8" fill="#059669">Cover concepts</text>
+
+  <!-- Phase 1: Marketing Specialist -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="156" width="140" height="48" rx="10" fill="#D1FAE5" stroke="#10B981" stroke-width="1.5"/>
+  </g>
+  <text x="250" y="175" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">Marketing Specialist</text>
+  <text x="250" y="192" text-anchor="middle" font-size="8" fill="#059669">Launch strategy</text>
+
+  <!-- Parallel label Phase 1 -->
+  <text x="335" y="125" text-anchor="middle" font-size="8" font-style="italic" fill="#059669">parallel</text>
+
+  <!-- Phase 2: Developmental Editor -->
+  <g filter="url(#shadow)">
+    <rect x="385" y="75" width="115" height="80" rx="10" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+  </g>
+  <text x="442" y="100" text-anchor="middle" font-size="10" font-weight="700" fill="#92400E">Developmental</text>
+  <text x="442" y="113" text-anchor="middle" font-size="10" font-weight="700" fill="#92400E">Editor</text>
+  <text x="442" y="131" text-anchor="middle" font-size="8" fill="#D97706">Structural review</text>
+  <text x="442" y="143" text-anchor="middle" font-size="8" fill="#D97706">&amp; scoring</text>
+
+  <!-- Phase 3: Proofreader -->
+  <g filter="url(#shadow)">
+    <rect x="555" y="60" width="125" height="48" rx="10" fill="#FFE4E6" stroke="#F43F5E" stroke-width="1.5"/>
+  </g>
+  <text x="617" y="79" text-anchor="middle" font-size="10" font-weight="700" fill="#9F1239">Proofreader</text>
+  <text x="617" y="96" text-anchor="middle" font-size="8" fill="#E11D48">Copy editing</text>
+
+  <!-- Phase 3: Formatter -->
+  <g filter="url(#shadow)">
+    <rect x="555" y="126" width="125" height="48" rx="10" fill="#FFE4E6" stroke="#F43F5E" stroke-width="1.5"/>
+  </g>
+  <text x="617" y="145" text-anchor="middle" font-size="10" font-weight="700" fill="#9F1239">Formatter</text>
+  <text x="617" y="162" text-anchor="middle" font-size="8" fill="#E11D48">Kindle CSS &amp; layout</text>
+
+  <!-- Parallel label Phase 3 -->
+  <text x="693" y="120" text-anchor="middle" font-size="8" font-style="italic" fill="#E11D48">parallel</text>
+
+  <!-- Phase 4: Kindle Compiler -->
+  <g filter="url(#shadow)">
+    <rect x="740" y="75" width="105" height="80" rx="10" fill="#E0E7FF" stroke="#6366F1" stroke-width="1.5"/>
+  </g>
+  <text x="792" y="100" text-anchor="middle" font-size="10" font-weight="700" fill="#3730A3">Kindle</text>
+  <text x="792" y="113" text-anchor="middle" font-size="10" font-weight="700" fill="#3730A3">Compiler</text>
+  <text x="792" y="131" text-anchor="middle" font-size="8" fill="#6366F1">Final assembly</text>
+  <text x="792" y="143" text-anchor="middle" font-size="8" fill="#6366F1">&amp; metadata</text>
+
+  <!-- Output: Kindle .docx -->
+  <g filter="url(#shadow)">
+    <rect x="895" y="88" width="80" height="54" rx="27" fill="#F3E8FF" stroke="#8B5CF6" stroke-width="1.5"/>
+  </g>
+  <text x="935" y="112" text-anchor="middle" font-size="10" font-weight="700" fill="#5B21B6">Kindle</text>
+  <text x="935" y="126" text-anchor="middle" font-size="10" font-weight="700" fill="#5B21B6">.docx</text>
+
+  <!-- Arrows: Researcher -> Phase 1 agents -->
+  <line x1="115" y1="95" x2="178" y2="68" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="115" y1="115" x2="178" y2="120" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="115" y1="135" x2="178" y2="175" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Arrow: Ghostwriter -> Dev Editor -->
+  <line x1="320" y1="68" x2="383" y2="100" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Arrows: Dev Editor -> Phase 3 agents -->
+  <line x1="500" y1="100" x2="553" y2="88" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="500" y1="130" x2="553" y2="145" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Arrows: Phase 3 agents -> Kindle Compiler -->
+  <line x1="680" y1="88" x2="738" y2="100" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="680" y1="148" x2="738" y2="132" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Arrow: Kindle Compiler -> Output -->
+  <line x1="845" y1="115" x2="893" y2="115" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Agent number badges -->
+  <circle cx="22" cy="83" r="8" fill="#3B82F6"/>
+  <text x="22" y="87" text-anchor="middle" font-size="8" font-weight="700" fill="white">1</text>
+
+  <circle cx="192" cy="48" r="8" fill="#10B981"/>
+  <text x="192" y="52" text-anchor="middle" font-size="8" font-weight="700" fill="white">2</text>
+
+  <circle cx="192" cy="106" r="8" fill="#10B981"/>
+  <text x="192" y="110" text-anchor="middle" font-size="8" font-weight="700" fill="white">3</text>
+
+  <circle cx="192" cy="164" r="8" fill="#10B981"/>
+  <text x="192" y="168" text-anchor="middle" font-size="8" font-weight="700" fill="white">4</text>
+
+  <circle cx="397" cy="83" r="8" fill="#F59E0B"/>
+  <text x="397" y="87" text-anchor="middle" font-size="8" font-weight="700" fill="white">5</text>
+
+  <circle cx="567" cy="68" r="8" fill="#F43F5E"/>
+  <text x="567" y="72" text-anchor="middle" font-size="8" font-weight="700" fill="white">6</text>
+
+  <circle cx="567" cy="134" r="8" fill="#F43F5E"/>
+  <text x="567" y="138" text-anchor="middle" font-size="8" font-weight="700" fill="white">7</text>
+
+  <circle cx="752" cy="83" r="8" fill="#6366F1"/>
+  <text x="752" y="87" text-anchor="middle" font-size="8" font-weight="700" fill="white">8</text>
+
+  <!-- Bottom legend -->
+  <text x="0" y="240" font-size="9" fill="#9CA3AF">Each phase completes before the next begins. Agents within the same phase run in parallel.</text>
+</svg>

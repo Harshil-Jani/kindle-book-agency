@@ -2,11 +2,9 @@
 
 A multi-agent Kindle publishing pipeline powered by Claude. 8 specialized AI agents collaborate to take a book idea from raw concept to a publish-ready Kindle manuscript (.docx) — complete with market research, sample chapters, cover design briefs, marketing strategy, professional editing, formatting specs, and final compilation.
 
-```
- Idea  ──>  Research  ──>  Write + Design + Market  ──>  Edit  ──>  Polish + Format  ──>  Kindle .docx
-              Agent 1         Agents 2,3,4                Agent 5      Agents 6,7           Agent 8
-              Phase 0              Phase 1                Phase 2        Phase 3             Phase 4
-```
+<p align="center">
+  <img src="docs/pipeline.svg" alt="Pipeline Diagram — 8 agents across 5 phases" width="100%"/>
+</p>
 
 ---
 
