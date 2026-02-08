@@ -1,25 +1,12 @@
 # Book Writer AI Agent Team
 
-A multi-agent Kindle publishing pipeline powered by Claude. 8 specialized AI agents collaborate to take a book idea from raw concept to a publish-ready Kindle manuscript (.docx) — complete with market research, sample chapters, cover design briefs, marketing strategy, professional editing, formatting specs, and final compilation.
+A multi-agent Kindle publishing pipeline powered by Claude. 8 specialized AI agents collaborate to take a book idea from concept to a publish-ready Kindle manuscript (`.docx`).
+
+**What you get:** Market research, book outline, sample chapters, cover design briefs, marketing strategy, professional editing, Kindle formatting specs, and a compiled manuscript — all from a single prompt.
 
 <p align="center">
   <img src="docs/pipeline.svg" alt="Pipeline Diagram — 8 agents across 5 phases" width="100%"/>
 </p>
-
----
-
-## Table of Contents
-
-- [The 8 Agents](#the-8-agents)
-- [How It Works](#how-it-works)
-- [Getting Started](#getting-started)
-  - [Option A: Claude Code (Recommended)](#option-a-claude-code-recommended)
-  - [Option B: CLI with Your Own API Key](#option-b-cli-with-your-own-api-key)
-- [Pipeline Walkthrough](#pipeline-walkthrough)
-- [Project Structure](#project-structure)
-- [Configuration](#configuration)
-- [Output](#output)
-- [FAQ](#faq)
 
 ---
 
@@ -40,106 +27,87 @@ Agents in the same phase run **in parallel**. The pipeline resolves dependencies
 
 ---
 
-## How It Works
-
-There are **two ways** to use this project:
-
-### Option A: Claude Code (Recommended)
-
-Use the agents directly inside [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Claude reads each agent's system prompt and performs that role in conversation with you. This is the primary workflow — no API key management, no setup. Just describe your book idea in plain English and Claude handles the rest.
-
-### Option B: CLI Pipeline
-
-If you have your own `ANTHROPIC_API_KEY`, run the full pipeline from the terminal. All 8 agents execute automatically (parallel where possible) via the Anthropic API.
-
----
-
 ## Getting Started
 
-### Option A: Claude Code (Recommended)
+### Option A: Claude Code (Recommended — zero setup)
 
-**Prerequisites:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed.
+> No API key needed. Claude Code reads the project's `CLAUDE.md` and knows the entire workflow.
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/book-writer.git
-cd book-writer
-
-# 2. Open in Claude Code
+git clone https://github.com/Harshil-Jani/kindle-book-agency.git
+cd kindle-book-agency
 claude
 ```
 
-**Usage — just describe your book idea in plain English:**
+Then describe your book:
 
 ```
 > I want to write a book about stoicism for software engineers
 ```
 
-Claude will automatically:
-1. Act as the **Niche Researcher** — explore the market with you interactively
-2. Run each subsequent agent in pipeline order
-3. Save outputs to `output/`
-4. At the end, the **Kindle Compiler** will ask you for your book title, author name, and other metadata, then generate a `.docx` manuscript
+That's it. Claude will:
+1. **Research** your niche interactively (market, keywords, audience)
+2. **Write** an outline + sample chapters, **design** cover concepts, and **build** a marketing plan
+3. **Edit** the manuscript (structural review + proofreading)
+4. **Format** for Kindle and **compile** into a `.docx`
 
-> **Note on `@` file references:** The `CLAUDE.md` file in this repo contains workflow instructions that Claude Code reads automatically, so you do **not** need to use `@agents/...` references. Just describe what you want. If you prefer explicit control, you can optionally use `@` to attach a specific agent file to your prompt (e.g., `@agents/niche-researcher.md "my topic"`), but this is not required.
+All outputs are saved to `output/`.
+
+> **Note:** You do **not** need `@agents/...` file references. Claude reads the agent prompts automatically via `CLAUDE.md`. If you prefer explicit control, you can optionally use `@` to attach a specific agent file (e.g., `@agents/niche-researcher.md "topic"`).
+
+You can also run individual agents:
+
+```
+Do niche research on "productivity for remote workers"
+Write sample chapters for my book
+Create cover concepts for my book
+Build a marketing strategy
+```
 
 ### Option B: CLI with Your Own API Key
 
-**Prerequisites:** Python 3.10+, an [Anthropic API key](https://console.anthropic.com/).
+> Runs all 8 agents programmatically via the Anthropic API. Requires Python 3.10+ and an API key.
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/book-writer.git
-cd book-writer
-
-# 2. Set your API key
+git clone https://github.com/Harshil-Jani/kindle-book-agency.git
+cd kindle-book-agency
 export ANTHROPIC_API_KEY="sk-ant-..."
 
-# 3. Run the full pipeline (easiest)
+# One-command run (handles venv + deps automatically)
 ./run.sh "stoicism for software engineers"
 ```
 
-The `run.sh` script handles virtual environment creation, dependency installation, and execution automatically.
-
-**Or set up manually:**
+<details>
+<summary><strong>Manual setup & CLI options</strong></summary>
 
 ```bash
-# Create virtual environment
-python3 -m venv .venv
-source .venv/bin/activate
-
-# Install Python dependencies
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-
-# Install Node.js dependencies (for .docx generation)
 npm install
 
-# Run
 python main.py "stoicism for software engineers"
 ```
 
-**CLI options:**
-
 ```bash
-# Use a faster/cheaper model
+# Faster/cheaper model
 python main.py --model claude-haiku-4-5-20251001 "your topic"
 
-# Run specific agents only (dependencies auto-included)
+# Run specific agents (dependencies auto-included)
 python main.py --select ghostwriter "your topic"
 python main.py --select proofreader,formatter "your topic"
 
 # List all agents
 python main.py --list-agents
 
-# Quiet mode (suppress progress logs)
+# Quiet mode
 python main.py --quiet "your topic"
 ```
+
+</details>
 
 ---
 
 ## Pipeline Walkthrough
-
-Here's what happens when you run the full pipeline:
 
 ### Phase 0 — Market Research
 
@@ -147,7 +115,7 @@ The **Niche Researcher** analyzes your book idea:
 - Validates the niche (demand vs. competition)
 - Builds a keyword strategy (primary + long-tail)
 - Creates an audience persona (demographics, pain points, desires)
-- Recommends a content angle and 3-5 title options
+- Recommends 3-5 title options with content angles
 - Maps the competitive landscape (top 5 competing titles)
 
 > In Claude Code, this phase is **interactive** — the researcher works with you to refine the niche before proceeding.
@@ -171,8 +139,6 @@ The **Developmental Editor** reviews the Ghostwriter's work:
 
 ### Phase 3 — Polish (Parallel)
 
-Two agents work simultaneously:
-
 | Agent | Receives | Produces |
 |-------|----------|----------|
 | **Proofreader** | Chapters + dev edit | Corrected text, edit log, style report |
@@ -180,64 +146,53 @@ Two agents work simultaneously:
 
 ### Phase 4 — Kindle Compilation
 
-The **Kindle Compiler** runs last:
+The **Kindle Compiler** collects your metadata (title, author, ISBN, dedication, bio) and compiles everything into a single `.docx`:
 
-1. **Asks you for metadata:**
-   - Book Title, Subtitle
-   - Author Name (pen name)
-   - Publisher / Imprint Name
-   - Copyright Year
-   - ASIN, ISBN (optional)
-   - Dedication (optional)
-   - About the Author bio
-   - Also By (other titles, optional)
-
-2. **Compiles everything** into a single Kindle-ready `.docx`:
-   - **Front matter:** Title page, copyright page, dedication, table of contents
-   - **Body:** All chapters (polished, with proper scene breaks)
-   - **Back matter:** Author bio, also-by list, review request
-
-3. **Applies Kindle-specific formatting** — no print specs, no embedded fonts, Heading 1 for TOC generation, proper indentation rules.
+- **Front matter:** Title page, copyright page, dedication, table of contents
+- **Body:** All polished chapters with proper scene breaks
+- **Back matter:** Author bio, also-by list, review request
+- **Kindle-specific formatting** — no print specs, Heading 1 for TOC generation, proper indentation
 
 ---
 
 ## Project Structure
 
 ```
-book-writer/
+kindle-book-agency/
 ├── agents/
-│   ├── __init__.py          # Package exports
-│   ├── definitions.py       # All 8 agent system prompts and configs
-│   └── orchestrator.py      # Dependency-aware parallel pipeline runner
+│   ├── niche-researcher.md       # Agent 1: Market research & niche validation
+│   ├── ghostwriter.md            # Agent 2: Book outline & sample chapters
+│   ├── cover-designer.md         # Agent 3: Cover design concepts
+│   ├── marketing-specialist.md   # Agent 4: Launch strategy & Amazon Ads
+│   ├── developmental-editor.md   # Agent 5: Structural review & scoring
+│   ├── proofreader.md            # Agent 6: Copy editing & style consistency
+│   ├── formatter.md              # Agent 7: Kindle/print formatting specs
+│   ├── kindle-compiler.md        # Agent 8: Final .docx manuscript compilation
+│   ├── kindle-book-generator.md  # Full pipeline orchestrator prompt
+│   ├── definitions.py            # All agent system prompts (for CLI mode)
+│   ├── orchestrator.py           # Dependency-aware parallel pipeline runner
+│   └── __init__.py
 ├── config/
-│   └── __init__.py          # Model selection, output paths
-├── output/                  # All generated content (gitignored)
-│   ├── market_research.md
-│   ├── ghostwriter.md
-│   ├── cover_designer.md
-│   ├── marketing_specialist.md
-│   ├── developmental_editor.md
-│   ├── proofreader.md
-│   ├── formatter.md
-│   ├── kindle_compiler.md
-│   └── full_report.md
-├── main.py                  # CLI entry point
-├── run.sh                   # One-command runner (handles setup)
-├── generate_cover.py        # Pillow-based cover image generator
-├── generate_book.js         # Node.js book generation scripts
-├── requirements.txt         # Python dependencies
-├── package.json             # Node.js dependencies (docx)
-├── CLAUDE.md                # Claude Code agent instructions
-└── README.md                # You are here
+│   └── __init__.py               # Model selection, output paths
+├── docs/
+│   ├── pipeline.svg              # Pipeline diagram (rendered in README)
+│   └── pipeline.drawio           # Editable source (diagrams.net)
+├── output/                       # Generated content (gitignored)
+├── main.py                       # CLI entry point
+├── run.sh                        # One-command runner (handles venv + deps)
+├── requirements.txt              # Python dependencies
+├── package.json                  # Node.js dependencies (docx generation)
+├── CLAUDE.md                     # Claude Code workflow instructions
+└── README.md
 ```
 
 ---
 
 ## Configuration
 
-### Model Selection
+### Model Selection (CLI mode)
 
-Edit `config/__init__.py` or pass `--model` on the CLI:
+Pass `--model` on the CLI or edit `config/__init__.py`:
 
 | Model | Speed | Quality | Cost |
 |-------|-------|---------|------|
@@ -245,7 +200,7 @@ Edit `config/__init__.py` or pass `--model` on the CLI:
 | `claude-sonnet-4-5-20250929` | Fast | Great | $$ |
 | `claude-haiku-4-5-20251001` | Fastest | Good | $ |
 
-Default is `claude-opus-4-6`. For quick iterations, use Haiku:
+Default: `claude-opus-4-6`. For quick iterations:
 
 ```bash
 python main.py --model claude-haiku-4-5-20251001 "your topic"
@@ -255,21 +210,17 @@ python main.py --model claude-haiku-4-5-20251001 "your topic"
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `ANTHROPIC_API_KEY` | CLI mode only | Your Anthropic API key (`sk-ant-...`) |
+| `ANTHROPIC_API_KEY` | CLI mode only | Your Anthropic API key |
 
-Not needed when using Claude Code directly — it handles auth for you.
+Not needed for Claude Code — it handles auth automatically.
 
 ---
 
 ## Output
 
-### Claude Code Mode
+**Claude Code:** Each agent saves to `output/{agent_name}.md`. Final manuscript: `output/kindle_manuscript.docx`.
 
-Each agent saves its output to `output/{agent_name}.md`. The final compiled manuscript goes to `output/kindle_manuscript.docx`.
-
-### CLI Mode
-
-Each run creates a timestamped directory:
+**CLI mode:** Each run creates a timestamped directory:
 
 ```
 output/run_20260208_143022/
@@ -281,40 +232,45 @@ output/run_20260208_143022/
 ├── proofreader.md
 ├── formatter.md
 ├── kindle_compiler.md
-├── full_report.md          # Combined markdown report
-└── summary.json            # Run metadata (timing, model, etc.)
+├── full_report.md
+└── summary.json
 ```
 
-The `output/` directory is gitignored — your generated content stays local.
+The `output/` directory is gitignored.
 
 ---
 
 ## FAQ
 
-**Q: Do I need an API key?**
-No — if you use Claude Code, it handles everything. You only need `ANTHROPIC_API_KEY` for the standalone CLI pipeline.
+<details>
+<summary><strong>Do I need an API key?</strong></summary>
+No — Claude Code handles everything. You only need <code>ANTHROPIC_API_KEY</code> for the standalone CLI pipeline.
+</details>
 
-**Q: How long does the full pipeline take?**
-Depends on the model. With Opus, expect several minutes. With Haiku, it's significantly faster. Parallel execution means phases 1 and 3 run their agents simultaneously.
+<details>
+<summary><strong>Can I run just one agent?</strong></summary>
+Yes. In Claude Code, ask directly (e.g., "Do niche research on X"). In CLI mode, use <code>--select</code>. Dependencies are auto-included.
+</details>
 
-**Q: Can I run just one agent?**
-Yes. Use `--select`:
-```bash
-python main.py --select niche_researcher "my book idea"
-```
-Dependencies are auto-included — selecting `proofreader` will automatically run `niche_researcher`, `ghostwriter`, and `developmental_editor` first.
+<details>
+<summary><strong>What format is the final manuscript?</strong></summary>
+A <code>.docx</code> file structured for direct upload to <a href="https://kdp.amazon.com/">KDP</a>, with proper front matter, body, and back matter using Kindle-specific formatting.
+</details>
 
-**Q: What format is the final manuscript?**
-The Kindle Compiler produces a `.docx` file structured for direct upload to [KDP](https://kdp.amazon.com/). It includes proper front matter, body chapters, and back matter with Kindle-specific formatting (no print specs).
+<details>
+<summary><strong>Do I need <code>@</code> file references in Claude Code?</strong></summary>
+No. <code>CLAUDE.md</code> provides all workflow instructions automatically. The <code>@</code> syntax is an optional shortcut for attaching specific agent files.
+</details>
 
-**Q: Do I need to use `@` file references in Claude Code?**
-No. The `CLAUDE.md` file contains all the workflow instructions Claude needs. Just open the project in Claude Code and describe your book idea in natural language — Claude reads the agent prompts from `agents/` automatically. The `@` syntax is an optional shortcut for attaching specific files to your prompt, but it is not required.
+<details>
+<summary><strong>Can I customize the agents?</strong></summary>
+Yes. Edit the agent's <code>.md</code> file in <code>agents/</code> (for Claude Code) or its <code>system_prompt</code> in <code>agents/definitions.py</code> (for CLI mode).
+</details>
 
-**Q: Can I customize the agents?**
-Yes. Each agent's behavior is defined by its `system_prompt` in `agents/definitions.py`. Edit the prompt to change what an agent produces.
-
-**Q: Is this for print books too?**
-The Formatter agent provides both Kindle and print specs. However, the final Kindle Compiler is Kindle-only — it strips all print-specific formatting (bleed, CMYK, spine calculations). The individual agent outputs in `output/formatter.md` still contain print specs if you need them.
+<details>
+<summary><strong>Is this for print books too?</strong></summary>
+The Formatter provides both Kindle and print specs, but the final Kindle Compiler is Kindle-only. Print specs are still available in <code>output/formatter.md</code>.
+</details>
 
 ---
 
