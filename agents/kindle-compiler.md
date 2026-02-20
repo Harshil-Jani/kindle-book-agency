@@ -5,13 +5,14 @@
 ## Dependencies
 
 ALL previous agents must complete first. Read these files:
-- `output/niche_researcher.md` — Market research and keyword strategy
-- `output/ghostwriter.md` — Book blueprint, outline, and sample chapters
-- `output/developmental_editor.md` — Structural edit report
-- `output/proofreader.md` — Polished manuscript text and edit log
-- `output/cover_designer.md` — Cover design brief
-- `output/formatter.md` — Kindle formatting specs and CSS
-- `output/marketing_specialist.md` — Launch strategy and Amazon listing copy
+- `output/{project}/niche_researcher.md` — Market research and keyword strategy
+- `output/{project}/ghostwriter.md` — Book blueprint, outline, and sample chapters
+- `output/{project}/developmental_editor.md` — Structural edit report
+- `output/{project}/proofreader.md` — Polished manuscript text and edit log
+- `output/{project}/cover_designer.md` — Cover design brief
+- `output/{project}/formatter.md` — Kindle formatting specs and CSS
+- `output/{project}/marketing_specialist.md` — Launch strategy and Amazon listing copy
+- `output/{project}/chapters/` — Expanded chapters directory (from chapter expansion step)
 
 ## Your Role
 
@@ -37,7 +38,35 @@ You must ask the user to provide the following details. Present them as a clear 
 
 Do NOT proceed to compilation until you have at minimum: Book Title, Author Name, and Publisher Name.
 
-### STEP 2: COMPILE THE KINDLE MANUSCRIPT (.docx)
+### STEP 1.5: SAVE METADATA
+
+After collecting the user's metadata, save it to `output/{project}/metadata.json` in this format:
+```json
+{
+  "book_title": "...",
+  "subtitle": "...",
+  "author": "...",
+  "publisher": "...",
+  "copyright_year": "2026",
+  "dedication": "...",
+  "about_author": "...",
+  "also_by": ["Title 1", "Title 2"]
+}
+```
+This file is read by `compile_kindle.py` to parameterize the .docx compilation.
+
+### STEP 2: ASSEMBLE CHAPTERS
+
+**If `output/{project}/chapters/` exists** (from the chapter expansion step):
+1. Read all chapter files (`ch01.md` through `chNN.md`) from the `chapters/` directory in numerical order
+2. Insert PART headings between chapter groups based on the ghostwriter's outline structure
+3. This is the primary content source — it contains ALL chapters, not just samples
+
+**If no `chapters/` directory exists** (fallback):
+1. Use the ghostwriter's sample chapters directly
+2. Include outline summaries for unwritten chapters
+
+### STEP 3: COMPILE THE KINDLE MANUSCRIPT (.docx)
 
 Using all agent outputs and the user's metadata, generate a complete Kindle manuscript document structured EXACTLY as follows:
 
@@ -91,4 +120,10 @@ Also output a brief **Compilation Summary** listing:
 
 ## Output
 
-Save the compiled manuscript to `output/kindle_manuscript.docx` and the compilation summary to `output/kindle_compiler.md`.
+Save the compiled manuscript to `output/{project}/kindle_manuscript.docx` and the compilation summary to `output/{project}/kindle_compiler.md`.
+
+To generate the .docx, run:
+```bash
+python compile_kindle.py output/{project}
+```
+This reads `metadata.json` and assembles from `chapters/` automatically.

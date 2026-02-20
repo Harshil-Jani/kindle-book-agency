@@ -30,12 +30,14 @@ A **Complete Book Outline & Sample Chapters** package:
 - Opening hook strategy for chapter 1
 - Transition strategy between chapters
 - Call-to-action / reader engagement points
+- **Important:** The outline must be detailed enough for independent chapter writers to produce each chapter without additional context. Include specific bullet points, key arguments, examples to use, and transitions for every chapter — not just the samples.
 
-### 3. Sample Chapters (write 2 full chapters)
+### 3. Sample Chapters (write 2 full chapters — these are STYLE ANCHORS)
 - Chapter 1 (the hook — this sells the book via "Look Inside")
 - One mid-book chapter that demonstrates depth and value
 - Incorporate target keywords naturally
 - Include actionable takeaways (non-fiction) or compelling narrative (fiction)
+- **Important:** These 2 sample chapters serve as style anchors for the parallel chapter expansion step. The remaining chapters will be written by independent AI processes that use these samples to match your voice, tone, and quality. Make these chapters exemplary.
 
 ### 4. SEO Metadata
 - 7 backend keywords for KDP

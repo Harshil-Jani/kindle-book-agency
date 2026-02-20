@@ -1,17 +1,19 @@
 """
 Parallel Orchestrator for the Book Writer AI Agent Team.
 
-Runs 8 agents through a dependency-aware DAG:
+Runs 8 agents + chapter expansion through a dependency-aware DAG:
 
-  Phase 0: [Niche Researcher]
-              |
-  Phase 1: [Ghostwriter] + [Cover Designer] + [Marketing Specialist]   <- parallel
-              |
-  Phase 2: [Developmental Editor]
-              |
-  Phase 3: [Proofreader] + [Formatter]   <- parallel
-              |
-  Phase 4: [Kindle Compiler]   <- collects metadata, generates .docx
+  Phase 0:   [Niche Researcher]
+                |
+  Phase 1:   [Ghostwriter] + [Cover Designer] + [Marketing Specialist]   <- parallel
+                |
+  Phase 2:   [Developmental Editor]
+                |
+  Phase 2.5: [Chapter Expander]   <- N parallel `claude -p` subprocesses
+                |
+  Phase 3:   [Proofreader] + [Formatter]   <- parallel
+                |
+  Phase 4:   [Kindle Compiler]   <- collects metadata, generates .docx
 
 Supports two modes:
   1. CLI mode  — prints to stdout
@@ -209,6 +211,90 @@ class BookWriterOrchestrator:
             self.results[agent.name] = result
             return result
 
+    def _prepare_run_dir(self, book_topic: str) -> Path:
+        """Create and populate the run directory with agent outputs so far.
+
+        Called before chapter expansion so that write_chapters.py can read
+        ghostwriter.md, developmental_editor.md, and niche_researcher.md from disk.
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        run_dir = self.output_dir / f"run_{timestamp}"
+        run_dir.mkdir(parents=True, exist_ok=True)
+
+        for name, result in self.results.items():
+            filepath = run_dir / f"{name}.md"
+            filepath.write_text(
+                f"# {result.role}\n\n"
+                f"**Generated:** {result.timestamp}\n"
+                f"**Duration:** {result.duration:.1f}s\n\n"
+                f"---\n\n{result.output}\n",
+                encoding="utf-8",
+            )
+
+        return run_dir
+
+    async def _expand_chapters(self, run_dir: Path):
+        """
+        Phase 2.5: Expand unwritten chapters via parallel claude CLI subprocesses.
+        Runs after the Developmental Editor completes.
+        """
+        self._log("─── Phase 2.5: Chapter Expansion (parallel subprocesses)")
+        await self._emit("phase_start", {
+            "phase": 2.5,
+            "agents": ["chapter_expander"],
+            "roles": ["Chapter Expander"],
+            "parallel": False,
+        })
+
+        start = time.time()
+
+        try:
+            from write_chapters import expand_chapters
+            results = await expand_chapters(
+                project_dir=run_dir,
+                concurrency=5,
+                model="sonnet",
+                force=False,
+            )
+
+            duration = time.time() - start
+            succeeded = sum(1 for r in results if r.get("status") == "success")
+            total_words = sum(r.get("word_count", 0) for r in results)
+
+            output_summary = (
+                f"Chapter expansion complete: {succeeded}/{len(results)} chapters written, "
+                f"{total_words:,} total words in {duration:.1f}s"
+            )
+
+            self.results["chapter_expander"] = AgentResult(
+                agent_name="chapter_expander",
+                role="Chapter Expander",
+                output=output_summary,
+                duration=duration,
+            )
+
+            self._log(f"✓ Chapter Expansion: {succeeded} chapters ({duration:.1f}s)")
+            await self._emit("agent_done", {
+                "agent": "chapter_expander",
+                "role": "Chapter Expander",
+                "duration": round(duration, 1),
+                "output_length": len(output_summary),
+                "output_preview": output_summary,
+            })
+
+        except Exception as e:
+            duration = time.time() - start
+            error_msg = f"Chapter expansion failed: {e}"
+            self._log(f"✗ Chapter Expansion failed: {e}")
+            self.results["chapter_expander"] = AgentResult(
+                agent_name="chapter_expander",
+                role="Chapter Expander",
+                output=error_msg,
+                duration=duration,
+            )
+
+        await self._emit("phase_done", {"phase": 2.5})
+
     async def run(self, book_topic: str) -> dict[str, AgentResult]:
         """
         Execute the full publishing pipeline for a given book topic.
@@ -225,6 +311,7 @@ class BookWriterOrchestrator:
         })
 
         total_start = time.time()
+        run_dir = None
 
         for phase_idx, phase_agents in enumerate(phases):
             agent_names = [a.name for a in phase_agents]
@@ -244,10 +331,15 @@ class BookWriterOrchestrator:
 
             await self._emit("phase_done", {"phase": phase_idx})
 
+            # After the Developmental Editor finishes, run chapter expansion
+            if "developmental_editor" in {a.name for a in phase_agents}:
+                run_dir = self._prepare_run_dir(book_topic)
+                await self._expand_chapters(run_dir)
+
         total_duration = time.time() - total_start
 
-        # Save outputs
-        run_dir = await self._save_outputs(book_topic, total_duration)
+        # Save outputs (reuses run_dir if already created for chapter expansion)
+        run_dir = await self._save_outputs(book_topic, total_duration, run_dir=run_dir)
 
         await self._emit("pipeline_done", {
             "total_duration": round(total_duration, 1),
@@ -261,10 +353,13 @@ class BookWriterOrchestrator:
 
         return self.results
 
-    async def _save_outputs(self, book_topic: str, total_duration: float) -> Path:
+    async def _save_outputs(
+        self, book_topic: str, total_duration: float, run_dir: Path | None = None,
+    ) -> Path:
         """Persist all agent outputs to the output directory."""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        run_dir = self.output_dir / f"run_{timestamp}"
+        if run_dir is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            run_dir = self.output_dir / f"run_{timestamp}"
         run_dir.mkdir(parents=True, exist_ok=True)
 
         # Save individual agent outputs
@@ -303,6 +398,7 @@ class BookWriterOrchestrator:
         phase_order = [
             "niche_researcher", "ghostwriter", "cover_designer",
             "marketing_specialist", "developmental_editor",
+            "chapter_expander",
             "proofreader", "formatter", "kindle_compiler",
         ]
 
