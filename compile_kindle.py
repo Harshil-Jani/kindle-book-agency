@@ -22,6 +22,14 @@ from docx import Document
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.style import WD_STYLE_TYPE
+from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
+
+try:
+    from diagram_renderer import parse_diagram_spec, render_diagram, extract_diagram_blocks
+    HAS_DIAGRAM_RENDERER = True
+except ImportError:
+    HAS_DIAGRAM_RENDERER = False
 
 
 # ── Legacy Defaults (backward compatibility) ──────────────────────────────
@@ -158,6 +166,52 @@ def assemble_from_chapters(project_dir: Path) -> str:
     return "\n\n".join(body_parts)
 
 
+# ── Page Numbers ──────────────────────────────────────────────────────────
+
+
+def add_page_numbers(doc):
+    """Add centered page numbers to document footer."""
+    for section in doc.sections:
+        footer = section.footer
+        footer.is_linked_to_previous = False
+        p = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        # Add PAGE field
+        run = p.add_run()
+        fldChar1 = OxmlElement('w:fldChar')
+        fldChar1.set(qn('w:fldCharType'), 'begin')
+        run._r.append(fldChar1)
+
+        run2 = p.add_run()
+        instrText = OxmlElement('w:instrText')
+        instrText.set(qn('xml:space'), 'preserve')
+        instrText.text = ' PAGE '
+        run2._r.append(instrText)
+
+        run3 = p.add_run()
+        fldChar2 = OxmlElement('w:fldChar')
+        fldChar2.set(qn('w:fldCharType'), 'end')
+        run3._r.append(fldChar2)
+
+        # Style the page number
+        for r in p.runs:
+            r.font.size = Pt(9)
+            r.font.name = 'Georgia'
+            r.font.color.rgb = RGBColor(0x88, 0x88, 0x88)
+
+
+# ── Chapter Visuals ──────────────────────────────────────────────────────
+
+
+def get_chapter_visuals(project_dir: Path, chapter_num: int) -> list[Path]:
+    """Find visual PNG files for a given chapter number."""
+    visuals_dir = project_dir / "chapters" / "visuals"
+    if not visuals_dir.exists():
+        return []
+    pattern = f"ch{chapter_num:02d}_*.png"
+    return sorted(visuals_dir.glob(pattern))
+
+
 # ── Styles ────────────────────────────────────────────────────────────────
 
 
@@ -171,9 +225,9 @@ def setup_styles(doc):
     font.color.rgb = RGBColor(0x1A, 0x1A, 0x1A)
     pf = style.paragraph_format
     pf.space_before = Pt(0)
-    pf.space_after = Pt(6)
+    pf.space_after = Pt(8)
     pf.first_line_indent = Inches(0.3)
-    pf.line_spacing = 1.4
+    pf.line_spacing = 1.5
 
     # No-indent paragraph (after headings and breaks)
     no_indent = doc.styles.add_style('NoIndent', WD_STYLE_TYPE.PARAGRAPH)
@@ -191,14 +245,24 @@ def setup_styles(doc):
     h1.paragraph_format.first_line_indent = Inches(0)
     h1.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
     h1.paragraph_format.page_break_before = True
+    # Add decorative bottom border to H1
+    pPr = h1.element.get_or_add_pPr()
+    pBdr = OxmlElement('w:pBdr')
+    bottom = OxmlElement('w:bottom')
+    bottom.set(qn('w:val'), 'single')
+    bottom.set(qn('w:sz'), '4')
+    bottom.set(qn('w:space'), '6')
+    bottom.set(qn('w:color'), '1A2B4A')
+    pBdr.append(bottom)
+    pPr.append(pBdr)
 
     # Heading 2 — Section headings
     h2 = doc.styles['Heading 2']
     h2.font.name = 'Helvetica Neue'
-    h2.font.size = Pt(16)
+    h2.font.size = Pt(17)
     h2.font.bold = True
-    h2.font.color.rgb = RGBColor(0x2D, 0x3E, 0x5F)
-    h2.paragraph_format.space_before = Pt(24)
+    h2.font.color.rgb = RGBColor(0x1E, 0x3A, 0x5F)
+    h2.paragraph_format.space_before = Pt(28)
     h2.paragraph_format.space_after = Pt(10)
     h2.paragraph_format.first_line_indent = Inches(0)
 
@@ -207,7 +271,7 @@ def setup_styles(doc):
     h3.font.name = 'Helvetica Neue'
     h3.font.size = Pt(13)
     h3.font.bold = True
-    h3.font.color.rgb = RGBColor(0x3A, 0x4F, 0x70)
+    h3.font.color.rgb = RGBColor(0x2A, 0x4F, 0x6F)
     h3.paragraph_format.space_before = Pt(18)
     h3.paragraph_format.space_after = Pt(6)
     h3.paragraph_format.first_line_indent = Inches(0)
@@ -455,13 +519,14 @@ def parse_table(lines, start_idx):
 
 
 def add_table(doc, rows):
-    """Add a formatted table to the document."""
+    """Add a professionally formatted table to the document."""
     if not rows or not rows[0]:
         return
 
     num_cols = len(rows[0])
     table = doc.add_table(rows=len(rows), cols=num_cols)
     table.style = 'Table Grid'
+    table.autofit = True
 
     for i, row in enumerate(rows):
         for j, cell_text in enumerate(row):
@@ -471,24 +536,79 @@ def add_table(doc, rows):
                 p = cell.paragraphs[0]
                 p.style = doc.styles['TableCell']
                 add_inline_formatting(p, cell_text)
+
+                # Header row styling
                 if i == 0:
+                    shading = OxmlElement('w:shd')
+                    shading.set(qn('w:fill'), '1A2B4A')
+                    shading.set(qn('w:val'), 'clear')
+                    cell._tc.get_or_add_tcPr().append(shading)
                     for run in p.runs:
                         run.font.bold = True
                         run.font.size = Pt(9.5)
+                        run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+                # Alternating row shading
+                elif i % 2 == 1:
+                    shading = OxmlElement('w:shd')
+                    shading.set(qn('w:fill'), 'F5F5F5')
+                    shading.set(qn('w:val'), 'clear')
+                    cell._tc.get_or_add_tcPr().append(shading)
 
     doc.add_paragraph('', style='NoIndent')
 
 
-def convert_markdown_to_docx(doc, markdown_text):
+def convert_markdown_to_docx(doc, markdown_text, project_dir=None):
     """Convert manuscript markdown to docx paragraphs."""
     lines = markdown_text.split('\n')
     i = 0
     in_code_block = False
     after_heading = True
+    current_chapter = 0
+    chapter_first_break_done = set()  # Track which chapters have had their visual inserted
 
     while i < len(lines):
         line = lines[i]
         stripped = line.strip()
+
+        # Track chapter numbers
+        ch_heading = re.match(r'^# Chapter (\d+):', stripped)
+        if ch_heading:
+            current_chapter = int(ch_heading.group(1))
+
+        # ── Diagram blocks ──
+        if stripped == '```diagram' and HAS_DIAGRAM_RENDERER and project_dir:
+            # Collect the diagram spec lines until closing ```
+            i += 1
+            diagram_lines = []
+            while i < len(lines) and lines[i].strip() != '```':
+                diagram_lines.append(lines[i])
+                i += 1
+            i += 1  # Skip closing ```
+            # Parse and render
+            spec = parse_diagram_spec('\n'.join(diagram_lines))
+            if spec.get('type'):
+                vis_dir = project_dir / 'chapters' / 'visuals' / 'inline'
+                img_path = render_diagram(spec, vis_dir)
+                if img_path and img_path.exists():
+                    doc.add_paragraph('', style='NoIndent')
+                    p = doc.add_paragraph(style='Centered')
+                    p.paragraph_format.space_before = Pt(12)
+                    p.paragraph_format.space_after = Pt(6)
+                    run = p.add_run()
+                    run.add_picture(str(img_path), width=Inches(4.5))
+                    # Add caption if title exists
+                    if spec.get('title'):
+                        cap = doc.add_paragraph(style='Centered')
+                        cap.paragraph_format.space_before = Pt(2)
+                        cap.paragraph_format.space_after = Pt(12)
+                        cap_run = cap.add_run(spec['title'])
+                        cap_run.font.size = Pt(8.5)
+                        cap_run.font.italic = True
+                        cap_run.font.color.rgb = RGBColor(0x4A, 0x5A, 0x7A)
+                    else:
+                        doc.add_paragraph('', style='NoIndent')
+            after_heading = True
+            continue
 
         # ── Code blocks ──
         if stripped.startswith('```'):
@@ -517,6 +637,20 @@ def convert_markdown_to_docx(doc, markdown_text):
         if stripped in ('---', '***', '* * *'):
             doc.add_paragraph('*  *  *', style='SectionBreak')
             after_heading = True
+
+            # Insert visuals after first section break in each chapter
+            if project_dir and current_chapter > 0 and current_chapter not in chapter_first_break_done:
+                chapter_first_break_done.add(current_chapter)
+                visuals = get_chapter_visuals(project_dir, current_chapter)
+                for vis_path in visuals:
+                    doc.add_paragraph('', style='NoIndent')
+                    p = doc.add_paragraph(style='Centered')
+                    p.paragraph_format.space_before = Pt(12)
+                    p.paragraph_format.space_after = Pt(12)
+                    run = p.add_run()
+                    run.add_picture(str(vis_path), width=Inches(4.5))
+                    doc.add_paragraph('', style='NoIndent')
+
             i += 1
             continue
 
@@ -661,12 +795,13 @@ def compile_book(project_dir: Path, metadata_path: Path | None = None) -> dict:
         section.different_first_page_header_footer = False
 
     doc = setup_styles(doc)
+    add_page_numbers(doc)
 
     print("  Adding front matter...")
     add_front_matter(doc, meta)
 
     print("  Converting manuscript body...")
-    convert_markdown_to_docx(doc, body)
+    convert_markdown_to_docx(doc, body, project_dir=project_dir)
 
     print("  Adding back matter...")
     add_back_matter(doc, meta)

@@ -162,6 +162,7 @@ config/__init__.py          — Model and output settings
 main.py                     — CLI entry point
 write_chapters.py           — Parallel chapter expansion via claude -p subprocesses
 compile_kindle.py           — Kindle .docx compiler (reads metadata.json + chapters/)
+diagram_renderer.py         — Generates PNG visuals from ```diagram``` blocks in chapters
 output/
   book-project-1/           — Each book gets its own folder
     ghostwriter.md
